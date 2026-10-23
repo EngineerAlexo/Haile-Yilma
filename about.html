@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Learn about Haile Yilma, his background, journey as a software developer, and core projects.">
+
+    <title>About | Haile Yilma</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .about-container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* Hero / Introduction Grid */
+        .about-hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 56px;
+            align-items: center;
+            margin-bottom: 72px;
+        }
+
+        .about-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.1);
+            color: #4f46e5;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+
+        /* Modern Punchy Heading with Gradient */
+        .about-title {
+            font-size: 2.75rem;
+            line-height: 1.25;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.03em;
+            margin-bottom: 22px;
+            max-width: 580px;
+        }
+
+        .about-title .gradient-text {
+            background: linear-gradient(135deg,
+                    #4f46e5 0%,
+                    #7c3aed 50%,
+                    #2563eb 100%);
+
+            background-clip: text;
+            -webkit-background-clip: text;
+
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+
+            display: inline-block;
+        }
+
+        /* Eye-Catching Description Card */
+        .about-highlight-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #4f46e5;
+            border-radius: 0 16px 16px 0;
+            padding: 22px 26px;
+            margin: 22px 0 28px;
+            box-shadow: 0 4px 18px -4px rgba(79, 70, 229, 0.07);
+        }
+
+        .box-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #334155;
+            margin: 0;
+        }
+
+        .box-text.secondary {
+            color: #475569;
+        }
+
+        .box-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 14px 0;
+        }
+
+        .text-highlight {
+            color: #4f46e5;
+            font-weight: 600;
+            background: rgba(99, 102, 241, 0.08);
+            padding: 2px 7px;
+            border-radius: 5px;
+        }
+
+        .about-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 0 0 32px;
+        }
+
+        .about-tag {
+            background: #f1f5f9;
+            color: #334155;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Image Frame Card */
+        .about-photo-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .photo-card {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.15);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 440px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-caption {
+            padding: 16px 20px;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .photo-caption h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .photo-caption p {
+            margin: 2px 0 0;
+            font-size: 0.825rem;
+            color: #64748b;
+        }
+
+        /* Highlights / Stats Strip */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            padding: 32px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            margin-bottom: 72px;
+        }
+
+        .stat-item h3 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #4f46e5;
+            margin: 0 0 4px;
+        }
+
+        .stat-item p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Values Grid */
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 8px 0;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 72px;
+        }
+
+        .value-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+            border-color: #cbd5e1;
+        }
+
+        .value-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 10px;
+        }
+
+        .value-card p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.925rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Banner */
+        .about-cta-banner {
+            text-align: center;
+            padding: 48px 32px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            border-radius: 24px;
+            color: #ffffff;
+        }
+
+        .about-cta-banner h2 {
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .about-cta-banner p {
+            color: #cbd5e1;
+            max-width: 540px;
+            margin: 0 auto 28px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .btn-white {
+            background: #ffffff;
+            color: #1e1b4b;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+
+        .btn-white:hover {
+            background: #f1f5f9;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-white {
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline-white:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Subtle discreet footer */
+        .site-footer {
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .footer-admin-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            opacity: 0.35;
+            transition: opacity 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer-admin-link:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 900px) {
+            .about-hero-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .cards-grid,
+            .stats-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .photo-card img {
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+
+<body class="about-page">
+
+    <!-- SITE HEADER -->
+    <header class="site-header">
+        <a class="brand" href="index.html">
+            <span class="brand-mark">H</span>
+            <span>Haile Yilma</span>
+        </a>
+
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation">☰</button>
+
+        <nav class="main-nav">
+            <a href="index.html">Home</a>
+            <a href="project.html">Projects</a>
+            <a class="active" href="about.html">About</a>
+            <a href="index.html#skills">Skills</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="header-actions">
+            <button class="theme-toggle" aria-label="Toggle color theme">☼</button>
+            <a class="button button-small button-primary" href="contact.html">Hire Me</a>
+        </div>
+    </header>
+
+    <main class="about-container">
+
+        <!-- 1. HERO & BIO SECTION -->
+        <section class="about-hero-grid">
+            <div class="about-copy">
+                <span class="about-badge">Get To Know Me</span>
+
+                <h1 class="about-title">
+                    Crafting digital products with <span class="gradient-text">purpose & precision.</span>
+                </h1>
+
+                <!-- Eye-Catching Description Card -->
+                <div class="about-highlight-box">
+                    <p class="box-text">
+                        Hello! I'm <strong>Haile Yilma</strong>, a software developer and Computer Science student. I
+                        engineer practical digital products across <span class="text-highlight">cross-platform mobile
+                            apps</span>, dynamic web services, and native desktop utilities.
+                    </p>
+                    <div class="box-divider"></div>
+                    <p class="box-text secondary">
+                        I believe great software isn't just about syntax—it's about <span class="text-highlight">empathy
+                            for the user</span> and solving real, everyday challenges through clean architecture.
+                    </p>
+                </div>
+
+                <!-- Categorized Highlights -->
+                <div class="about-tags">
+                    <span class="about-tag">Full-Stack & Mobile</span>
+                    <span class="about-tag">Computer Science</span>
+                    <span class="about-tag">Problem Solver</span>
+                    <span class="about-tag">Continuous Learner</span>
+                </div>
+
+                <div class="hero-actions">
+                    <a class="button button-primary" href="contact.html">Get in touch →</a>
+                    <a class="button" href="project.html">View My Work</a>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="about-photo-wrapper">
+                <div class="photo-card">
+                    <img src="assets/haile-yilmas.jpg" alt="Haile Yilma">
+                    <div class="photo-caption">
+                        <h4>Haile Yilma</h4>
+                        <p>Software Developer & CS Student</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. QUICK STATS STRIP -->
+        <section class="stats-strip">
+            <div class="stat-item">
+                <h3>Full-Stack</h3>
+                <p>Web & Cross-Platform Mobile focus</p>
+            </div>
+            <div class="stat-item">
+                <h3>Practical</h3>
+                <p>Real-world apps in production & active use</p>
+            </div>
+            <div class="stat-item">
+                <h3>Continuous</h3>
+                <p>Passionate about building & rapid learning</p>
+            </div>
+        </section>
+
+        <!-- 3. VALUES & PRINCIPLES -->
+        <section class="about-values-section">
+            <div class="section-header">
+                <span class="about-badge">Core Principles</span>
+                <h2>What Drives My Work</h2>
+                <p style="color: #64748b;">The standards and values I carry into every project I build.</p>
+            </div>
+
+            <div class="cards-grid">
+                <article class="value-card">
+                    <h3>Impact-Driven</h3>
+                    <p>I focus on building functional software that solves actual needs and simplifies daily tasks for
+                        real users.</p>
+                </article>
+
+                <article class="value-card">
+                    <h3>Continuous Growth</h3>
+                    <p>Tech changes fast. I dedicate time daily to mastering modern architectures, experimenting with
+                        new stacks, and refining best practices.</p>
+                </article>
+
+                <article class="value-card">
+                    <h3>Team & Community</h3>
+                    <p>Active collaboration, knowledge-sharing, and building accessible solutions that elevate the
+                        developer and local community.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- 4. BOTTOM CALL TO ACTION -->
+        <section class="about-cta-banner">
+            <h2>Let's build something meaningful together.</h2>
+            <p>
+                Whether you have an idea for an app, a collaborative project, or an exciting opportunity, I’m always
+                open to discussing tech.
+            </p>
+            <div>
+                <a class="btn-white" href="contact.html">Start a Conversation →</a>
+                <a class="btn-outline-white" href="project.html">Explore Projects</a>
+            </div>
+        </section>
+
+        <!-- 5. FOOTER WITH DISCREET ADMIN GATE -->
+        <footer class="site-footer">
+            <span>© 2026 Haile Yilma. All rights reserved.</span>
+            <a href="admin.html" class="footer-admin-link" title="Admin Portal" aria-label="Admin Portal">🔒</a>
+        </footer>
+
+    </main>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Keyboard Shortcut: Press Ctrl + Shift + A to open admin login directly
+        window.addEventListener("keydown", (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "a") {
+                window.location.href = "admin.html";
+            }
+        });
+    </script>
+</body>
+
+</html>

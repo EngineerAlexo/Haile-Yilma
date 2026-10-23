@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Haile Yilma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f3f4f6; min-height: 100vh; margin: 0; padding: 2rem; }
+        .dashboard-container { max-width: 1200px; margin: 0 auto; }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding: 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .dashboard-header h1 { margin: 0; color: #1f2937; }
+        .logout-btn { background: #ef4444; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; transition: 0.3s; }
+        .logout-btn:hover { background: #dc2626; }
+        
+        .dashboard-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; }
+        .stat-card h3 { font-size: 0.875rem; color: #6b7280; margin: 0 0 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-card .number { font-size: 3rem; font-weight: 700; color: #1f2937; }
+        .stat-card .number.unread-count { color: #ef4444; }
+
+        .messages-section { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .messages-section h2 { margin: 0 0 1.5rem 0; color: #1f2937; }
+
+        .message-item { 
+            padding: 1.5rem; 
+            border-left: 4px solid #e5e7eb; 
+            background: #f9fafb; 
+            border-radius: 0 8px 8px 0; 
+            margin-bottom: 1rem; 
+            transition: 0.3s;
+        }
+        .message-item.unread { 
+            border-left-color: #4f46e5; 
+            background: #eef2ff; 
+        }
+        .message-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .message-item .name { font-weight: 700; color: #1f2937; font-size: 1.1rem; }
+        .badge-new { background: #4f46e5; color: white; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 99px; font-weight: 600; }
+        
+        .message-item .email { font-size: 0.875rem; color: #6b7280; margin-bottom: 0.5rem; }
+        .message-item .subject { font-weight: 600; color: #4f46e5; margin-bottom: 0.5rem; }
+        .message-item .message-text { color: #374151; line-height: 1.6; margin-bottom: 1rem; white-space: pre-wrap; }
+        .message-item .timestamp { font-size: 0.75rem; color: #9ca3af; margin-bottom: 1rem; }
+
+        .message-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .btn-action { 
+            padding: 0.5rem 1rem; 
+            border-radius: 6px; 
+            font-size: 0.875rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            border: none; 
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: 0.2s;
+        }
+        .btn-reply { background: #10b981; color: white; }
+        .btn-reply:hover { background: #059669; }
+        .btn-read { background: #e5e7eb; color: #374151; }
+        .btn-read:hover { background: #d1d5db; }
+        .btn-delete { background: #fee2e2; color: #ef4444; margin-left: auto; }
+        .btn-delete:hover { background: #fecaca; }
+
+        .loading, .no-messages { text-align: center; color: #6b7280; padding: 2rem; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>🛡️ Admin Dashboard</h1>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total Messages</h3>
+                <div class="number" id="totalMessages">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Unread Messages</h3>
+                <div class="number unread-count" id="unreadMessages">0</div>
+            </div>
+        </div>
+
+        <div class="messages-section">
+            <h2>📬 Inbox</h2>
+            <div id="messagesList">
+                <div class="loading">Loading messages...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDsJpE8rGdy_EDyeitpo47g_rnMoxLRBLs",
+            authDomain: "haileportifolio.firebaseapp.com",
+            projectId: "haileportifolio",
+            storageBucket: "haileportifolio.firebasestorage.app",
+            messagingSenderId: "324304784576",
+            appId: "1:324304784576:web:f0658e126df8316fa2b125"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "admin.html";
+            } else {
+                listenToMessages();
+            }
+        });
+
+        function listenToMessages() {
+            const messagesList = document.getElementById("messagesList");
+            const totalEl = document.getElementById("totalMessages");
+            const unreadEl = document.getElementById("unreadMessages");
+
+            const messagesRef = collection(db, "messages");
+
+            onSnapshot(messagesRef, (snapshot) => {
+                let total = 0;
+                let unread = 0;
+                messagesList.innerHTML = "";
+
+                if (snapshot.empty) {
+                    messagesList.innerHTML = "<div class='no-messages'>📭 No messages yet.</div>";
+                    totalEl.textContent = "0";
+                    unreadEl.textContent = "0";
+                    return;
+                }
+
+                const docs = [];
+                snapshot.forEach(docSnap => {
+                    docs.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                // Sort newest first
+                docs.sort((a, b) => {
+                    const timeA = a.createdAt?.toMillis?.() || 0;
+                    const timeB = b.createdAt?.toMillis?.() || 0;
+                    return timeB - timeA;
+                });
+
+                docs.forEach((data) => {
+                    total++;
+                    const isRead = data.isRead === true || data.status === "read";
+                    if (!isRead) unread++;
+
+                    const date = data.createdAt && typeof data.createdAt.toDate === "function"
+                        ? new Date(data.createdAt.toDate()).toLocaleString()
+                        : "Recent";
+
+                    // Pre-fill parameters for Gmail Web Compose
+                    const replyTo = encodeURIComponent(data.email || '');
+                    const replySubject = encodeURIComponent(`Re: ${data.subject || 'Your Message'}`);
+                    const replyBody = encodeURIComponent(`Hi ${data.name || ''},\n\nThank you for reaching out!\n\nBest regards,\nHaile Yilma`);
+                    
+                    // Direct browser link to compose in Gmail web
+                    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${replyTo}&su=${replySubject}&body=${replyBody}`;
+
+                    const messageDiv = document.createElement("div");
+                    messageDiv.className = `message-item ${isRead ? '' : 'unread'}`;
+                    messageDiv.innerHTML = `
+                        <div class="message-header">
+                            <span class="name">${data.name || 'Anonymous'}</span>
+                            ${!isRead ? '<span class="badge-new">NEW</span>' : ''}
+                        </div>
+                        <div class="email">📧 ${data.email || 'No email'}</div>
+                        <div class="subject">📌 ${data.subject || 'No subject'}</div>
+                        <div class="message-text">${data.message || 'No message content'}</div>
+                        <div class="timestamp">🕐 ${date}</div>
+                        
+                        <div class="message-actions">
+                            <a href="${gmailLink}" target="_blank" rel="noopener noreferrer" class="btn-action btn-reply">✉️ Reply via Gmail</a>
+                            <button class="btn-action btn-read" data-id="${data.id}" data-read="${isRead}">
+                                ${isRead ? '↩️ Mark as Unread' : '✅ Mark as Read'}
+                            </button>
+                            <button class="btn-action btn-delete" data-id="${data.id}">🗑️ Delete</button>
+                        </div>
+                    `;
+                    messagesList.appendChild(messageDiv);
+                });
+
+                totalEl.textContent = total;
+                unreadEl.textContent = unread;
+                attachActionListeners();
+            }, (error) => {
+                console.error("Error fetching messages:", error);
+                messagesList.innerHTML = `<div class="no-messages" style="color:red;">⚠️ Error: ${error.message}</div>`;
+            });
+        }
+
+        function attachActionListeners() {
+            document.querySelectorAll(".btn-read").forEach(btn => {
+                btn.onclick = async (e) => {
+                    const docId = e.currentTarget.dataset.id;
+                    const currentRead = e.currentTarget.dataset.read === "true";
+                    const msgRef = doc(db, "messages", docId);
+                    await updateDoc(msgRef, {
+                        isRead: !currentRead,
+                        status: !currentRead ? "read" : "unread"
+                    });
+                };
+            });
+
+            document.querySelectorAll(".btn-delete").forEach(btn => {
+                btn.onclick = async (e) => {
+                    if (confirm("Are you sure you want to delete this message?")) {
+                        const docId = e.currentTarget.dataset.id;
+                        await deleteDoc(doc(db, "messages", docId));
+                    }
+                };
+            });
+        }
+
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            await signOut(auth);
+            window.location.href = "admin.html";
+        });
+    </script>
+</body>
+</html>
